@@ -16,8 +16,6 @@ RUN npm run build -- --configuration production
 # Starting a new stage from nginx to serve the application
 FROM nginx:alpine
 
-# Copying the build output from the previous stage to the nginx serving directory
-COPY --from=build /app/dist/hello-world/browser /usr/share/nginx/html
-
+COPY --from=build /app/dist/hello-docker /usr/share/nginx/html
 # Ensure Nginx runs on the foreground
 CMD ["nginx", "-g", "daemon off;"]
