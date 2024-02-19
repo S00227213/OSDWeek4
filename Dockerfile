@@ -16,6 +16,11 @@ RUN npm run build -- --configuration production
 # Starting a new stage from nginx to serve the application
 FROM nginx:alpine
 
+# Copying the nginx configuration file into the container
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copying the built Angular app to the Nginx serve directory
 COPY --from=build /app/dist/hello-docker /usr/share/nginx/html
+
 # Ensure Nginx runs on the foreground
 CMD ["nginx", "-g", "daemon off;"]
