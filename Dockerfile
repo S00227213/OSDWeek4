@@ -16,11 +16,11 @@ RUN npm run build -- --configuration production
 # Starting a new stage from nginx to serve the application
 FROM nginx:alpine
 
-# Copying the nginx configuration file into the container
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copying the nginx configuration template into the container
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 # Copying the built Angular app to the Nginx serve directory
 COPY --from=build /app/dist/hello-docker /usr/share/nginx/html
 
-# Ensure Nginx runs on the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Using envsubst to replace the PORT variable and running Nginx in the foreground
+CMD /bin/sh -c "envsubst < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
